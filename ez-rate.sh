@@ -20,13 +20,13 @@ do
     if [[ $? -ne 0 ]]
     then
         echo "$NEEDED not installed"
-        exit 2
+        exit 4
     fi
 done
 
 function handler() {
     pkill geeqie
-	exit 8
+	exit 0
 }
 trap handler SIGINT
 
@@ -59,7 +59,7 @@ do
 
 	oldrating=$($EXIFTOOL -s3 -UserComment "$img")
 	echo "oldrating: $oldrating"
-	[[ $oldrating == "" ]] || [[ -z $oldrating ]] || [[ $oldrating =~ "^[0-9]+$" ]] && oldrating=0
+	[[ $oldrating == "" ]] || [[ -z $oldrating ]] || [[ ! $oldrating =~ "^[0-9]+$" ]] && oldrating=0
 	newrating=$(( oldrating + 1 ))
 	echo "newrating: $newrating"
 	$EXIFTOOL -UserComment=$newrating -overwrite_original "$img"
